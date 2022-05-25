@@ -1,0 +1,184 @@
+const { ethers, upgrades, network } = require("hardhat");
+
+const deployed = require("./deployed-"+network.config.chainId+".json")
+
+const {BigNumber} = ethers
+
+function ForBig(big) {
+    if ( big instanceof BigNumber ) {
+        return big.toString()
+    }
+
+
+    if (  big instanceof Object ) {
+        let obj = big instanceof Array ?[]:{}
+        for(let k in big ) {
+            obj[k] = ForBig(big[k])
+        }
+        return obj
+    }
+    return big
+}
+
+const Hex = num => {
+    const h = num.toString(16)
+    return '0x' + (h.length % 2 === 1?'0':'') + num.toString(16)
+}
+
+const DecimalHex = Hex(1e18)
+
+const MaxInit = '0x'+'f'.repeat(64)
+
+const Sleep = (s) => new Promise((r,j) => setTimeout(r, s))
+
+let _accounts;
+async function Accounts() {
+    if ( _accounts ) return _accounts
+    _accounts = await ethers.getSigners()
+    return _accounts 
+}
+
+let _contract = {};
+let _contractFactory = {};
+async function attach(contractName, address) {
+    if ( !_contract[address] ) {
+        if ( !_contractFactory[contractName] ) {
+            _contractFactory[contractName] = await ethers.getContractFactory(contractName)
+        }
+        let contract = _contractFactory[contractName];
+        contract = contract.attach(address)
+        contract.calls = new Proxy({}, {
+            get(_, key) {
+                return (...arg) => {
+                    const met = [
+                        contract.address,
+                        contract.interface.encodeFunctionData(key, arg)
+                    ]
+                    met._isMethods = true
+                    met.decode = hex => {
+                        const ed = contract.interface.decodeFunctionResult(key, hex)
+                        return ed.length <= 1 ? ed[0] : ed
+                    }
+                    return met
+                }
+            }
+        });
+        _contract[address] = contract
+    }
+    return _contract[address]
+}
+
+
+/////////// MultiCall ///////////
+// any 
+function proxy(obj, key, call) {
+    Object.defineProperty(obj, key, {
+        get: () => call(),
+        enumerable : true,
+        configurable : false
+    })
+}
+
+async function MultiCall() {
+    const multiCall = await attach("MultiCall", deployed.MULTI_CALL)
+    multiCall.callArr = async (callsArg) => {
+        const calRes = await multiCall.callStatic.aggregate(callsArg)
+        return calRes.returnData.map((v,i) => callsArg[i].decode(v))
+    }
+    multiCall.callObj = async (methodsObj) => {
+        // 存放 encodeABI
+        let calls = []
+        let pro = []
+        // 存放 callsIndex
+        const callsIndex = methodsObj instanceof Array?[]:{}
+
+        function analyze(methods, parentObj, key) {
+            if ( methods._isMethods) {
+                const index = calls.length
+                calls.push(methods)
+                proxy(parentObj, key, () => {
+                    return methods.decode(calls[index])
+                })
+            }
+            else if ( methods instanceof Promise ) {
+                const index = pro.length
+                pro.push(methods)
+                proxy(parentObj, key, () => pro[index])
+            }
+            else if ( methods instanceof BigNumber ) {
+                parentObj[key] = methods
+            }
+            else if ( methods instanceof Object ) {
+                parentObj[key] = methods instanceof Array?[]:{}
+                for(let index in methods) {
+                    analyze(methods[index], parentObj[key], index)
+                }
+            }
+            else {
+                parentObj[key] = methods
+            }
+        }
+
+        for(let key in methodsObj) {
+            analyze(methodsObj[key], callsIndex, key)
+        }
+
+        calls = (await multiCall.callStatic.aggregate(calls)).returnData
+        if ( pro.length > 0 ) pro = await Promise.all(pro)
+        return callsIndex        
+    }
+    return multiCall
+}
+
+
+async function SendBNB(fromSigner, toAddress, amountBig) {
+    tx = await fromSigner.sendTransaction({
+        to: toAddress,
+        value: amountBig
+    })
+    console.log(fromSigner.address, " send BNB to ", toAddress, " on ", tx.hash)
+    await tx.wait()
+}
+
+function BnbBalance(address) {
+    return ethers.provider.getBalance(address)
+}
+
+// deploy contract by deployed json
+
+// deployed.ContractAt
+
+function ERC20(address) {
+    return attach("TestCoin", address)
+}
+
+function Pair(address) {
+    return attach("MockUniswapV2FactoryUniswapV2Pair", address)
+}
+
+const Attach = new Proxy({}, {
+    get: function(_, contactName) {
+        const address = deployed.ContractAt[contactName]
+        return address && attach(contactName, address)
+    }
+});
+
+module.exports = {
+    ForBig,
+    Sleep,
+    Hex,
+    DecimalHex,
+    MaxInit,
+    Accounts,
+    BigNumber,
+
+    BnbBalance,
+    SendBNB,
+    MultiCall,
+    ERC20,
+    address: deployed,
+    Attach,
+    Pair,
+    // UniFactory,
+    // Router,
+}
