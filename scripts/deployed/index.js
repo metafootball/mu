@@ -163,6 +163,30 @@ const Attach = new Proxy({}, {
     }
 });
 
+async function Deploy(contractName, ...arg) {
+    let dep = await ethers.getContractFactory(contractName)
+    await dep.deployed(...arg)
+    console.log(contractName, " deployed to ", dep.address )
+    return dep.address
+}
+
+async function DeployProxy(contractName, arg, config ) {
+    let dep = await ethers.getContractFactory(contractName)
+    dep = await upgrades.deployProxy(dep, arg, config);
+    await dep.deployed();
+    console.log(contractName, " deployed to ", dep.address )
+    return dep.address
+}
+
+async function UpProxy(contractName) {
+    const address = deployed.ContractAt[contractName]
+    if (!address) throw contractName + ' not address';
+    let dep = await ethers.getContractFactory(contractName)
+    dep = await upgrades.upgradeProxy(address, dep);
+    console.log(contractName, " deployed to ", dep.address )
+    return dep.address
+}
+
 module.exports = {
     ForBig,
     Sleep,
@@ -179,6 +203,9 @@ module.exports = {
     address: deployed,
     Attach,
     Pair,
+    Deploy,
+    DeployProxy,
+    UpProxy
     // UniFactory,
     // Router,
 }
