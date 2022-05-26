@@ -131,13 +131,47 @@ async function MultiCall() {
 }
 
 
-async function SendBNB(fromSigner, toAddress, amountBig) {
+async function SendBNB(fromSigner, toAddress, amountBig, data = "0x") {
     tx = await fromSigner.sendTransaction({
         to: toAddress,
-        value: amountBig
+        value: amountBig,
+        data
     })
     console.log(fromSigner.address, " send BNB to ", toAddress, " on ", tx.hash)
     await tx.wait()
+}
+
+function CallBNB(fromSigner, toAddress, inputABI, outputType) {
+    return fromSigner.provider.call(
+        {
+            from: fromSigner.address,
+            to: toAddress,
+            data: inputABI
+        }
+    ).then( hex => {
+        return outputType ? DecodeABI(outputType, hex) : hex
+    })
+}
+
+function EstimateGas(fromSigner, toAddress, inputABI) {
+    return fromSigner.provider.call(
+        {
+            from: fromSigner.address,
+            to: toAddress,
+            data: inputABI
+        }
+    )
+}
+
+// types => ["uint","address"]
+// dataArray = [[123, "0x111111"]]
+function EncodeABI(methodsName, types, dataArray) {
+    if (isNaN(methodsName * 1) ) methodsName = (ethers.utils.solidityKeccak256(["string"], [methodsName])).slice(0,10)
+    return ethers.utils.defaultAbiCoder.encode(types, dataArray).replace("0x",methodsName)
+}
+
+function DecodeABI(types, hex) {
+    return ethers.utils.defaultAbiCoder.decode(types, hex)
 }
 
 function BnbBalance(address) {
@@ -205,7 +239,11 @@ module.exports = {
     Pair,
     Deploy,
     DeployProxy,
-    UpProxy
+    UpProxy,
+    EncodeABI,
+    DecodeABI,
+    CallBNB,
+    EstimateGas
     // UniFactory,
     // Router,
 }
