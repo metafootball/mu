@@ -199,7 +199,7 @@ const Attach = new Proxy({}, {
 
 async function Deploy(contractName, ...arg) {
     let dep = await ethers.getContractFactory(contractName)
-    await dep.deployed(...arg)
+    dep = await dep.deploy(...arg)
     console.log(contractName, " deployed to ", dep.address )
     return dep
 }
