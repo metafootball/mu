@@ -40,12 +40,17 @@ async function Accounts() {
 
 let _contract = {};
 let _contractFactory = {};
+
+async function getContractFactory(contractName) {
+    if ( !_contractFactory[contractName] ) {
+        _contractFactory[contractName] = await ethers.getContractFactory(contractName)
+    }
+    return _contractFactory[contractName];
+}
+
 async function attach(contractName, address) {
     if ( !_contract[address] ) {
-        if ( !_contractFactory[contractName] ) {
-            _contractFactory[contractName] = await ethers.getContractFactory(contractName)
-        }
-        let contract = _contractFactory[contractName];
+        let contract = await getContractFactory(contractName)
         contract = contract.attach(address)
         contract.calls = new Proxy({}, {
             get(_, key) {
@@ -197,15 +202,17 @@ const Attach = new Proxy({}, {
     }
 });
 
+
 async function Deploy(contractName, ...arg) {
-    let dep = await ethers.getContractFactory(contractName)
+    let dep = await getContractFactory(contractName)
+    console.log(...arg)
     dep = await dep.deploy(...arg)
     console.log(contractName, " deployed to ", dep.address )
     return dep
 }
 
 async function DeployProxy(contractName, arg, config ) {
-    let dep = await ethers.getContractFactory(contractName)
+    let dep = await getContractFactory(contractName)
     dep = await upgrades.deployProxy(dep, arg, config);
     await dep.deployed();
     console.log(contractName, " deployed to ", dep.address )
@@ -215,7 +222,7 @@ async function DeployProxy(contractName, arg, config ) {
 async function UpProxy(contractName) {
     const address = deployed.ContractAt[contractName]
     if (!address) throw contractName + ' not address';
-    let dep = await ethers.getContractFactory(contractName)
+    let dep = await getContractFactory(contractName)
     dep = await upgrades.upgradeProxy(address, dep);
     console.log(contractName, " deployed to ", dep.address )
     return dep
