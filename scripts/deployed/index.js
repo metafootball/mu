@@ -201,7 +201,7 @@ async function Deploy(contractName, ...arg) {
     let dep = await ethers.getContractFactory(contractName)
     await dep.deployed(...arg)
     console.log(contractName, " deployed to ", dep.address )
-    return dep.address
+    return dep
 }
 
 async function DeployProxy(contractName, arg, config ) {
@@ -209,7 +209,7 @@ async function DeployProxy(contractName, arg, config ) {
     dep = await upgrades.deployProxy(dep, arg, config);
     await dep.deployed();
     console.log(contractName, " deployed to ", dep.address )
-    return dep.address
+    return dep
 }
 
 async function UpProxy(contractName) {
@@ -218,7 +218,19 @@ async function UpProxy(contractName) {
     let dep = await ethers.getContractFactory(contractName)
     dep = await upgrades.upgradeProxy(address, dep);
     console.log(contractName, " deployed to ", dep.address )
-    return dep.address
+    return dep
+}
+
+async function DeploySwap(freeToAddress) {
+    const WETH = await Deploy("WETH")
+    const factory = await Deploy("UniFactory", freeToAddress)
+    const router = await Deploy("Router", factory.address, WETH.address)
+
+    return {
+        WETH,
+        factory,
+        router
+    }
 }
 
 module.exports = {
@@ -243,7 +255,8 @@ module.exports = {
     EncodeABI,
     DecodeABI,
     CallBNB,
-    EstimateGas
+    EstimateGas,
+    DeploySwap
     // UniFactory,
     // Router,
 }
