@@ -1,0 +1,171 @@
+{
+  "manifestVersion": "3.2",
+  "admin": {
+    "address": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+    "txHash": "0x1f34e52c4897a474ac09de63f9c0cf4823f0ca99edba01479887a7661a44ff62"
+  },
+  "proxies": [
+    {
+      "address": "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+      "txHash": "0x83f467690a88b816f9307f1bee4a016141382f2cd2fd526ee3454eef4812dbe9",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "8410ac4ccbde0c27793a0799c58af3e0032bc85488ee6a695c5df92bb92dd803": {
+      "address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+      "txHash": "0x462553f17325d2111abe86613bc13038685537573d92c1f0fe841fe9e35265b2",
+      "layout": {
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint8",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:36"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_address",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "52",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:87"
+          },
+          {
+            "label": "backlist",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_mapping(t_address,t_bool)",
+            "contract": "KillRobot",
+            "src": "contracts/work/KillRobot.sol:75"
+          },
+          {
+            "label": "whiteList",
+            "offset": 0,
+            "slot": "102",
+            "type": "t_mapping(t_address,t_bool)",
+            "contract": "KillRobot",
+            "src": "contracts/work/KillRobot.sol:78"
+          },
+          {
+            "label": "decoys",
+            "offset": 0,
+            "slot": "103",
+            "type": "t_mapping(t_address,t_bool)",
+            "contract": "KillRobot",
+            "src": "contracts/work/KillRobot.sol:80"
+          },
+          {
+            "label": "limitSell",
+            "offset": 0,
+            "slot": "104",
+            "type": "t_uint256",
+            "contract": "KillRobot",
+            "src": "contracts/work/KillRobot.sol:85"
+          },
+          {
+            "label": "stepSell",
+            "offset": 0,
+            "slot": "105",
+            "type": "t_uint256",
+            "contract": "KillRobot",
+            "src": "contracts/work/KillRobot.sol:88"
+          },
+          {
+            "label": "lpSwap",
+            "offset": 0,
+            "slot": "106",
+            "type": "t_address",
+            "contract": "KillRobot",
+            "src": "contracts/work/KillRobot.sol:88"
+          },
+          {
+            "label": "holder",
+            "offset": 0,
+            "slot": "107",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "KillRobot",
+            "src": "contracts/work/KillRobot.sol:92"
+          },
+          {
+            "label": "proxy",
+            "offset": 0,
+            "slot": "108",
+            "type": "t_mapping(t_address,t_bool)",
+            "contract": "KillRobot",
+            "src": "contracts/work/KillRobot.sol:96"
+          },
+          {
+            "label": "canBuy",
+            "offset": 0,
+            "slot": "109",
+            "type": "t_bool",
+            "contract": "KillRobot",
+            "src": "contracts/work/KillRobot.sol:97"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint8": {
+            "label": "uint8",
+            "numberOfBytes": "1"
+          }
+        }
+      }
+    }
+  }
+}
