@@ -233,6 +233,16 @@ async function DeploySwap(freeToAddress) {
     }
 }
 
+async function SetBlockTime(seconds) {
+    await network.provider.send("evm_setNextBlockTimestamp", [seconds])
+    await network.provider.send("evm_mine")
+}
+
+async function AddBlockTime(seconds) {
+    await network.provider.send("evm_increaseTime", [seconds])
+    await network.provider.send("evm_mine")
+}
+
 module.exports = {
     ForBig,
     Sleep,
@@ -256,7 +266,9 @@ module.exports = {
     DecodeABI,
     CallBNB,
     EstimateGas,
-    DeploySwap
+    DeploySwap,
+    SetBlockTime,
+    AddBlockTime
     // UniFactory,
     // Router,
 }
