@@ -197,8 +197,13 @@ function Pair(address) {
 
 const Attach = new Proxy({}, {
     get: function(_, contactName) {
-        const address = deployed.ContractAt[contactName]
-        return address && attach(contactName, address)
+        return address => {
+            if ( !address ) {
+                address = deployed.ContractAt[contactName]
+            }
+            if ( !address ) throw(contactName, " address error")
+            return attach(contactName, address)
+        }
     }
 });
 

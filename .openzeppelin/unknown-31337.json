@@ -9,6 +9,11 @@
       "address": "0x0165878A594ca255338adfa4d48449f69242Eb8F",
       "txHash": "0x83f467690a88b816f9307f1bee4a016141382f2cd2fd526ee3454eef4812dbe9",
       "kind": "transparent"
+    },
+    {
+      "address": "0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82",
+      "txHash": "0x403af24ba4fd99b19a2bef4b3a5e0e6bef16a7f2d4e59f3af4ea5bb8fed2a6f1",
+      "kind": "transparent"
     }
   ],
   "impls": {
@@ -155,6 +160,373 @@
           "t_mapping(t_address,t_uint256)": {
             "label": "mapping(address => uint256)",
             "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint8": {
+            "label": "uint8",
+            "numberOfBytes": "1"
+          }
+        }
+      }
+    },
+    "4b027a86ac2ce3444884f9e9096c1998471835f529e97dba3635a0b92ef90798": {
+      "address": "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
+      "txHash": "0x10ea58d7c879ab7792d2b0936d30a8e398cf8e6499f5484535d8ace85a4b3167",
+      "layout": {
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint8",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:36"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_address",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "52",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:87"
+          },
+          {
+            "label": "factory",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_contract(IFactory)3462",
+            "contract": "TrimV2",
+            "src": "contracts/utils/TrimLp.sol:24"
+          },
+          {
+            "label": "_pair_",
+            "offset": 0,
+            "slot": "102",
+            "type": "t_address",
+            "contract": "TrimV2",
+            "src": "contracts/utils/TrimLp.sol:33"
+          },
+          {
+            "label": "_token0_",
+            "offset": 0,
+            "slot": "103",
+            "type": "t_address",
+            "contract": "TrimV2",
+            "src": "contracts/utils/TrimLp.sol:34"
+          },
+          {
+            "label": "_token1_",
+            "offset": 0,
+            "slot": "104",
+            "type": "t_address",
+            "contract": "TrimV2",
+            "src": "contracts/utils/TrimLp.sol:36"
+          },
+          {
+            "label": "_isReversed_",
+            "offset": 20,
+            "slot": "104",
+            "type": "t_bool",
+            "contract": "TrimV2",
+            "src": "contracts/utils/TrimLp.sol:37"
+          },
+          {
+            "label": "startTime",
+            "offset": 0,
+            "slot": "105",
+            "type": "t_uint256",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:40"
+          },
+          {
+            "label": "bonusRateEPX_RATE",
+            "offset": 0,
+            "slot": "106",
+            "type": "t_uint256",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:45"
+          },
+          {
+            "label": "ecologyRateEPX_RATE",
+            "offset": 0,
+            "slot": "107",
+            "type": "t_uint256",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:47"
+          },
+          {
+            "label": "discountRateEPX_RATE",
+            "offset": 0,
+            "slot": "108",
+            "type": "t_uint256",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:50"
+          },
+          {
+            "label": "totalShare",
+            "offset": 0,
+            "slot": "109",
+            "type": "t_uint256",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:53"
+          },
+          {
+            "label": "totalDeposits",
+            "offset": 0,
+            "slot": "110",
+            "type": "t_uint256",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:55"
+          },
+          {
+            "label": "totalUsdt",
+            "offset": 0,
+            "slot": "111",
+            "type": "t_uint256",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:58"
+          },
+          {
+            "label": "shareNetEPX",
+            "offset": 0,
+            "slot": "112",
+            "type": "t_uint256",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:62"
+          },
+          {
+            "label": "shareNetRateEPX_RATE",
+            "offset": 0,
+            "slot": "113",
+            "type": "t_uint256",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:65"
+          },
+          {
+            "label": "depositsNetEPX",
+            "offset": 0,
+            "slot": "114",
+            "type": "t_uint256",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:67"
+          },
+          {
+            "label": "beforeEarnTokenBalance",
+            "offset": 0,
+            "slot": "115",
+            "type": "t_uint256",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:69"
+          },
+          {
+            "label": "lasteSettlementBalance",
+            "offset": 0,
+            "slot": "116",
+            "type": "t_uint256",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:72"
+          },
+          {
+            "label": "_staked",
+            "offset": 0,
+            "slot": "117",
+            "type": "t_mapping(t_address,t_struct(Staked)6635_storage)",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:112"
+          },
+          {
+            "label": "minerPool",
+            "offset": 0,
+            "slot": "118",
+            "type": "t_address",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:120"
+          },
+          {
+            "label": "burnProxy",
+            "offset": 0,
+            "slot": "119",
+            "type": "t_address",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:123"
+          },
+          {
+            "label": "bonus",
+            "offset": 0,
+            "slot": "120",
+            "type": "t_contract(AssetCustody)1930",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:124"
+          },
+          {
+            "label": "ecology",
+            "offset": 0,
+            "slot": "121",
+            "type": "t_contract(AssetCustody)1930",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:126"
+          },
+          {
+            "label": "discount",
+            "offset": 0,
+            "slot": "122",
+            "type": "t_contract(AssetCustody)1930",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:128"
+          },
+          {
+            "label": "treasury",
+            "offset": 0,
+            "slot": "123",
+            "type": "t_contract(AssetCustody)1930",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:131"
+          },
+          {
+            "label": "relation",
+            "offset": 0,
+            "slot": "124",
+            "type": "t_contract(IRelation)5638",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:134"
+          },
+          {
+            "label": "usdt",
+            "offset": 0,
+            "slot": "125",
+            "type": "t_address",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:136"
+          },
+          {
+            "label": "sixcd",
+            "offset": 0,
+            "slot": "126",
+            "type": "t_address",
+            "contract": "StakeLp",
+            "src": "contracts/work/StakeLP.sol:136"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_contract(AssetCustody)1930": {
+            "label": "contract AssetCustody",
+            "numberOfBytes": "20"
+          },
+          "t_contract(IFactory)3462": {
+            "label": "contract IFactory",
+            "numberOfBytes": "20"
+          },
+          "t_contract(IRelation)5638": {
+            "label": "contract IRelation",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_address,t_struct(Staked)6635_storage)": {
+            "label": "mapping(address => struct StakeLp.Staked)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(Staked)6635_storage": {
+            "label": "struct StakeLp.Staked",
+            "members": [
+              {
+                "label": "deposits",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "share",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "availableRewards",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "depositsNetEPX",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "3"
+              },
+              {
+                "label": "shareNetEPX",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "4"
+              },
+              {
+                "label": "teamUsdt",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "5"
+              },
+              {
+                "label": "shareMultiplierEPX_RATE",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "6"
+              },
+              {
+                "label": "lpWei",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "7"
+              },
+              {
+                "label": "burnedUsdt",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "8"
+              }
+            ],
+            "numberOfBytes": "288"
           },
           "t_uint256": {
             "label": "uint256",

@@ -11,7 +11,7 @@ const {
 async function main() {
     // console.log(network)
     const accounts = await Accounts()
-    const usdt = await Attach.USDT
+    const usdt = await Attach.USDT()
     // console.log(
     //     await usdt.balanceOf(accounts[0].address)
     // )
