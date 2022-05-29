@@ -1,0 +1,1 @@
+npx hardhat test test/work/${1}
