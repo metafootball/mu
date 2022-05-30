@@ -170,9 +170,13 @@ function EstimateGas(fromSigner, toAddress, inputABI) {
 
 // types => ["uint","address"]
 // dataArray = [[123, "0x111111"]]
-function EncodeABI(methodsName, types, dataArray) {
+function MethodsEncodeABI(methodsName, types, dataArray) {
     if (isNaN(methodsName * 1) ) methodsName = (ethers.utils.solidityKeccak256(["string"], [methodsName])).slice(0,10)
     return ethers.utils.defaultAbiCoder.encode(types, dataArray).replace("0x",methodsName)
+}
+
+function EncodeABI(types, dataArray) {
+    return ethers.utils.defaultAbiCoder.encode(types, dataArray)
 }
 
 function DecodeABI(types, hex) {
@@ -276,6 +280,7 @@ module.exports = {
     UpProxy,
     EncodeABI,
     DecodeABI,
+    MethodsEncodeABI,
     CallBNB,
     EstimateGas,
     DeploySwap,

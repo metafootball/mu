@@ -3,7 +3,7 @@ const { ethers, upgrades, network } = require("hardhat");
 const {
     Attach,
     Accounts,
-    EncodeABI,
+    MethodsEncodeABI,
     DecodeABI,
     CallBNB
 } = require('./deployed')
@@ -19,7 +19,7 @@ async function main() {
         await CallBNB(
             accounts[0],
             "0x6D1225934410433A80a8a5E6E1D113a01D53C280",
-            EncodeABI("name()",[],[]),
+            MethodsEncodeABI("name()",[],[]),
             ["string"]
         )
     )
