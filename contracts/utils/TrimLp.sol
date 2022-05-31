@@ -6,6 +6,9 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "../utils/SafeToken.sol";
 import "../interface/IPair.sol";
 
+import "hardhat/console.sol";
+
+
 // 减少路径，改库仅做计算，避免了买卖全权漏洞 和 0.001 最小转账剩余问题
 
 interface IFactory {
@@ -116,6 +119,9 @@ contract TrimV2 {
         uint amount0,
         uint amount1
     ) internal returns(uint256 moreLPAmount) {
+        if ( _isReversed_ ) {
+            (amount0, amount1) = (amount1, amount0);
+        }
         if ( from == address(this) ) {
             _token0_.safeTransfer( _pair_, amount0);
             _token1_.safeTransfer( _pair_, amount1);
@@ -149,21 +155,29 @@ contract TrimV2 {
     ) internal returns(uint amount0Out, uint amount1Out) {
         address tokenIn;
         uint amountIn;
+        bool outTokne1;
+        uint _out;
         if ( amountIn1 == 0 ) {
             tokenIn = _token0_;
             amountIn = amountIn0;
+            outTokne1 = true;
+            _out = getAmountOut(amountIn, reserveIn, reserveOut, feeEPX);
         }
         else if ( amountIn0 == 0 ) {
             tokenIn = _token1_;
             amountIn = amountIn1;
-        } else {
+            outTokne1 = false;
+            _out = getAmountOut(amountIn, reserveOut, reserveIn, feeEPX);
+        }
+        else {
             require(false, "amountIn error");
         }
-        uint _out = getAmountOut(amountIn, reserveIn, reserveOut, feeEPX);
-        if (_isReversed_) {
-            amount0Out = _out;
-        } else {
+
+        
+        if (outTokne1) {
             amount1Out = _out;
+        } else {
+            amount0Out = _out;
         }
 
         if ( from == address(this) ) {
@@ -171,7 +185,10 @@ contract TrimV2 {
         } else {
             tokenIn.safeTransferFrom(from , _pair_, amountIn);
         }
-        
+        // 重新核对 token0 位置
+        if ( _isReversed_ ) {
+            (amount0Out, amount1Out) = (amount1Out, amount0Out);
+        }
         IPair(_pair_).swap(amount0Out, amount1Out, to, EMPTY_DATA);
     }
 
@@ -196,31 +213,36 @@ contract TrimV2 {
     function _addLpFrom(address _from, address _to, uint token0Amount, uint token1Amount, uint minLp, uint feeEPX) internal returns(uint moreLPAmount) {
         
         // 买入配平的 token
-        uint balance0Before = _token0_.myBalance();
-        uint balance1Before = _token1_.myBalance();
+        int balance0Before = int(_token0_.myBalance());
+        int balance1Before = int(_token1_.myBalance());
 
         address _self = address(this);
-
+        
         // 配平需要在预支代币
-        if (token0Amount > 0) {
-            _token0_.safeTransferFrom(_from, _self, token0Amount);
-        }
+        if ( _from != _self ) {
+            if (token0Amount > 0) {
+                _token0_.safeTransferFrom(_from, _self, token0Amount);
+            }
 
-        if (token1Amount > 0) {
-            _token1_.safeTransferFrom(_from, _self, token1Amount);
+            if (token1Amount > 0) {
+                _token1_.safeTransferFrom(_from, _self, token1Amount);
+            }
         }
-        
-        
         _calAndSwapFor( _self, _self, token0Amount, token1Amount, feeEPX);
 
-        uint balance0After = _token0_.myBalance();
-        uint balance1After = _token1_.myBalance();
+        int balance0After = int(_token0_.myBalance());
+        int balance1After = int(_token1_.myBalance());
+        // 计算 变量
+        // from == _self 时，balance1 可能被卖出，所以用 int
 
-        _token0_.safeTransfer(_pair_, balance0After - balance0Before);
-        _token1_.safeTransfer(_pair_, balance1After - balance1Before);
+        token0Amount = uint(int(token0Amount) + balance0After - balance0Before);
+        token1Amount = uint(int(token1Amount) + balance1After - balance1Before);
+
+        _token0_.safeTransfer(_pair_, token0Amount);
+        _token1_.safeTransfer(_pair_, token1Amount);
         moreLPAmount = IPair(_pair_).mint(_to);
 
-        require(minLp >= moreLPAmount, "insufficient tokens received");
+        require(moreLPAmount >= minLp, "insufficient tokens received");
     }
 
     function _buyFor(
@@ -333,8 +355,14 @@ contract TrimV2Generic is TrimV2 {
         }
         
         IPair(pair).swap(amount0Out, amount1Out, to, bytes(""));
+    }
 
-
+    function _safeTransferFrom(address _token, address _from, address _to, uint _amount) internal {
+        if ( _from == address(this) ) {
+            _token.safeTransfer(_to, _amount);
+        } else {
+            _token.safeTransferFrom(_from , _to, _amount);
+        }
     }
 
 }

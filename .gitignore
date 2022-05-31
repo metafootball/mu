@@ -5,7 +5,9 @@ coverage
 coverage.json
 typechain
 
+work.sh
 #Hardhat files
 cache
 artifacts
 work
+replenish.js

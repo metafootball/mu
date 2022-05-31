@@ -40,6 +40,9 @@ contract TestCoin is ERC20 {
 
 contract USDT is ERC20 {
     constructor () ERC20("USDT", "USDT") {
-        super._mint(msg.sender, 100000000 * 1e18);
+        _mint(msg.sender, 100000000 * 1e18);
+    }
+    function mint(address to, uint amount) external {
+        _mint( to, amount);
     }
 }

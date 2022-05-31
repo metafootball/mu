@@ -29,6 +29,8 @@ const DecimalHex = Hex(1e18)
 
 const MaxInit = '0x'+'f'.repeat(64)
 
+const ZeroAddress = "0x" + '0'.repeat(40)
+
 const Sleep = (s) => new Promise((r,j) => setTimeout(r, s))
 
 let _accounts;
@@ -250,13 +252,24 @@ async function DeploySwap(freeToAddress) {
 }
 
 async function SetBlockTime(seconds) {
-    await network.provider.send("evm_setNextBlockTimestamp", [seconds])
-    await network.provider.send("evm_mine")
+    try {
+        // 仅 test net 可用
+        await network.provider.send("evm_setNextBlockTimestamp", [seconds])
+        await network.provider.send("evm_mine")
+    } catch (error) {
+        console.log("当前网络不支持 SetBlockTime")
+    }
+    
 }
 
 async function AddBlockTime(seconds) {
-    await network.provider.send("evm_increaseTime", [seconds])
-    await network.provider.send("evm_mine")
+    try {
+        // 仅 test net 可用
+        await network.provider.send("evm_increaseTime", [seconds])
+        await network.provider.send("evm_mine")
+    } catch (error) {
+        console.log("当前网络不支持 AddBlockTime")
+    }
 }
 
 module.exports = {
@@ -285,7 +298,8 @@ module.exports = {
     EstimateGas,
     DeploySwap,
     SetBlockTime,
-    AddBlockTime
+    AddBlockTime,
+    ZeroAddress
     // UniFactory,
     // Router,
 }

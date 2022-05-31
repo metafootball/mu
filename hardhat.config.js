@@ -2,7 +2,7 @@ require("dotenv").config();
 
 require("@nomiclabs/hardhat-etherscan");
 require("@nomiclabs/hardhat-waffle");
-// require("hardhat-gas-reporter");
+require("hardhat-gas-reporter");
 // require("solidity-coverage");
 require('@openzeppelin/hardhat-upgrades');
 
@@ -47,11 +47,29 @@ module.exports = {
       },
       chainId: 56
     },
+    qng: {
+      url: "http://47.242.255.132:1234",
+      accounts: {
+        mnemonic: process.env.QNG_MNEMONIC,
+        // count: 100
+      },
+      chainId: 8132
+    },
+    qngTest: {
+      url: "http://146.196.54.208:1234",
+      accounts: {
+        mnemonic: process.env.QNG_MNEMONIC,
+        // count: 100
+      },
+      chainId: 223
+    },
   },
-  // gasReporter: {
-  //   enabled: process.env.REPORT_GAS !== undefined,
-  //   currency: "USD",
-  // },
+
+  
+  gasReporter: {
+    enabled: process.env.REPORT_GAS !== undefined,
+    currency: "USD",
+  },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
   },
