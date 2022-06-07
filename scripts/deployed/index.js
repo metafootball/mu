@@ -272,6 +272,22 @@ async function AddBlockTime(seconds) {
     }
 }
 
+// 冒出账户 仅 fork 可用
+let signers = {}
+async function _ImportAddress(address) {
+    const provider = new ethers.providers.JsonRpcProvider(network.config.url);
+    await provider.send("hardhat_impersonateAccount", [address]);
+    return provider.getSigner(address); 
+}
+async function ImportAddress(address) {
+    address = address.toLocaleLowerCase()
+    if (!signers[address]) {
+        signers[address] = await _ImportAddress(address) 
+    }
+    return signers[address]
+    
+}
+
 module.exports = {
     ForBig,
     Sleep,
@@ -299,7 +315,8 @@ module.exports = {
     DeploySwap,
     SetBlockTime,
     AddBlockTime,
-    ZeroAddress
+    ZeroAddress,
+    ImportAddress
     // UniFactory,
     // Router,
 }
