@@ -6,7 +6,7 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "../utils/SafeToken.sol";
 import "../interface/IPair.sol";
 
-import "hardhat/console.sol";
+// import "hardhat/console.sol";
 
 
 // 减少路径，改库仅做计算，避免了买卖全权漏洞 和 0.001 最小转账剩余问题
@@ -257,13 +257,6 @@ contract TrimV2 {
     }
     
     // 判断输入
-    // p = reserve0 / reserve1
-    // k = reserve0 * reserve1
-    // p1 = (token0 + reserve0) / (token1 + reserve1)
-    // x = sqrt( k * p1 )
-    // dx = x - reserve0
-    // dy = k / x
-
     // given an input amount of an asset and pair reserves, returns the maximum output amount of the other asset
     // feeEPX 9975
     function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut, uint256 feeEPX) internal pure returns (uint amountOut) {

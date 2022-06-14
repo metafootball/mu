@@ -47,22 +47,22 @@ module.exports = {
       },
       chainId: 56
     },
-    qng: {
-      url: "http://47.242.255.132:1234",
-      accounts: {
-        mnemonic: process.env.QNG_MNEMONIC,
-        // count: 100
-      },
-      chainId: 8132
-    },
-    qngTest: {
-      url: "http://146.196.54.208:1234",
-      accounts: {
-        mnemonic: process.env.QNG_MNEMONIC,
-        // count: 100
-      },
-      chainId: 223
-    },
+    // qng: {
+    //   url: "http://47.242.255.132:1234",
+    //   accounts: {
+    //     mnemonic: process.env.QNG_MNEMONIC,
+    //     // count: 100
+    //   },
+    //   chainId: 8132
+    // },
+    // qngTest: {
+    //   url: "http://146.196.54.208:1234",
+    //   accounts: {
+    //     mnemonic: process.env.QNG_MNEMONIC,
+    //     // count: 100
+    //   },
+    //   chainId: 223
+    // },
   },
 
   
