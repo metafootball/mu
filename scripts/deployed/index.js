@@ -75,7 +75,6 @@ async function attach(contractName, address) {
     return _contract[address]
 }
 
-
 /////////// MultiCall ///////////
 // any 
 function proxy(obj, key, call) {
@@ -201,19 +200,6 @@ function Pair(address) {
     return attach("MockUniswapV2FactoryUniswapV2Pair", address)
 }
 
-const Attach = new Proxy({}, {
-    get: function(_, contactName) {
-        return address => {
-            if ( !address ) {
-                address = deployed.ContractAt[contactName]
-            }
-            if ( !address ) throw(contactName, " address error")
-            return attach(contactName, address)
-        }
-    }
-});
-
-
 async function Deploy(contractName, ...arg) {
     let dep = await getContractFactory(contractName)
     console.log(...arg)
@@ -238,6 +224,23 @@ async function UpProxy(contractName) {
     console.log(contractName, " deployed to ", dep.address )
     return dep
 }
+
+
+const Attach = new Proxy({}, {
+    get: function(_, contactName) {
+        const getAttach = address => {
+            if ( !address ) {
+                address = deployed.ContractAt[contactName]
+            }
+            if ( !address ) throw(contactName, " address error")
+            return attach(contactName, address)
+        }
+        getAttach.Deploy = (...arg) => Deploy(contactName, ...arg)
+        getAttach.DeployProxy = (arg, config) => DeployProxy(contactName, arg, config)
+        getAttach.UpProxy = () => UpProxy(contactName)
+        return getAttach
+    }
+});
 
 async function DeploySwap(freeToAddress) {
     const WETH = await Deploy("WETH")
