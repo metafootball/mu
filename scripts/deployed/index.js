@@ -255,7 +255,7 @@ async function SetBlockTime(seconds) {
     try {
         // 仅 test net 可用
         await network.provider.send("evm_setNextBlockTimestamp", [seconds])
-        await network.provider.send("evm_mine")
+        // await network.provider.send("evm_mine")
     } catch (error) {
         console.log("当前网络不支持 SetBlockTime")
     }
@@ -266,7 +266,7 @@ async function AddBlockTime(seconds) {
     try {
         // 仅 test net 可用
         await network.provider.send("evm_increaseTime", [seconds])
-        await network.provider.send("evm_mine")
+        // await network.provider.send("evm_mine")
     } catch (error) {
         console.log("当前网络不支持 AddBlockTime")
     }
