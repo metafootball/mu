@@ -216,8 +216,8 @@ async function DeployProxy(contractName, arg, config ) {
     return dep
 }
 
-async function UpProxy(contractName) {
-    const address = deployed.ContractAt[contractName]
+async function UpProxy(contractName, address) {
+    address = address || deployed.ContractAt[contractName]
     if (!address) throw contractName + ' not address';
     let dep = await getContractFactory(contractName)
     dep = await upgrades.upgradeProxy(address, dep);
@@ -237,7 +237,7 @@ const Attach = new Proxy({}, {
         }
         getAttach.Deploy = (...arg) => Deploy(contactName, ...arg)
         getAttach.DeployProxy = (arg, config) => DeployProxy(contactName, arg, config)
-        getAttach.UpProxy = () => UpProxy(contactName)
+        getAttach.UpProxy = (address) => UpProxy(contactName, address)
         return getAttach
     }
 });
@@ -278,9 +278,9 @@ async function AddBlockTime(seconds) {
 // 冒出账户 仅 fork 可用
 let signers = {}
 async function _ImportAddress(address) {
-    const provider = new ethers.providers.JsonRpcProvider(network.config.url);
+    const provider = process.env.IN_FORK === 'true' ? network.provider : new ethers.providers.JsonRpcProvider(network.config.url);
     await provider.send("hardhat_impersonateAccount", [address]);
-    return provider.getSigner(address); 
+    return ethers.provider.getSigner(address); 
 }
 async function ImportAddress(address) {
     address = address.toLocaleLowerCase()

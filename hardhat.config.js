@@ -23,6 +23,22 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
+let hardhat = {}
+if ( process.env.IN_FORK === 'true' ) {
+  hardhat = {
+    throwOnTransactionFailures: true,
+    throwOnCallFailures: true,
+    allowUnlimitedContractSize: true,
+    forking: {
+      url: process.env.BSC_RPC, // 全节点
+      blockNumber: 18905774 
+    },
+    // mining: {
+    //   auto: true,
+    //   interval: 3000
+    // }
+  }
+}
 module.exports = {
   mocha: {
     timeout: 2000000000
@@ -52,19 +68,7 @@ module.exports = {
       // accounts: [process.env.PRIVATE_KEY],
       chainId: 31337
     },
-    hardhat: {
-      throwOnTransactionFailures: true,
-      throwOnCallFailures: true,
-      allowUnlimitedContractSize: true,
-      forking: {
-        url: process.env.BSC_RPC, // 全节点
-        blockNumber: 18740235 
-      },
-      // mining: {
-      //   auto: true,
-      //   interval: 3000
-      // }
-    },
+    hardhat,
   },
 
   
