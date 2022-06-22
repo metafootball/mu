@@ -283,6 +283,7 @@ async function ImportAddress(address) {
     address = address.toLocaleLowerCase()
     if (!signers[address]) {
         signers[address] = await _ImportAddress(address) 
+        signers[address].address = address
     }
     return signers[address]
     
