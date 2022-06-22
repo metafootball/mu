@@ -47,22 +47,24 @@ module.exports = {
       },
       chainId: 56
     },
-    // qng: {
-    //   url: "http://47.242.255.132:1234",
-    //   accounts: {
-    //     mnemonic: process.env.QNG_MNEMONIC,
-    //     // count: 100
-    //   },
-    //   chainId: 8132
-    // },
-    // qngTest: {
-    //   url: "http://146.196.54.208:1234",
-    //   accounts: {
-    //     mnemonic: process.env.QNG_MNEMONIC,
-    //     // count: 100
-    //   },
-    //   chainId: 223
-    // },
+    dev: {
+      url: "http://localhost:8545",
+      // accounts: [process.env.PRIVATE_KEY],
+      chainId: 31337
+    },
+    hardhat: {
+      throwOnTransactionFailures: true,
+      throwOnCallFailures: true,
+      allowUnlimitedContractSize: true,
+      forking: {
+        url: process.env.BSC_RPC, // 全节点
+        blockNumber: 18740235 
+      },
+      // mining: {
+      //   auto: true,
+      //   interval: 3000
+      // }
+    },
   },
 
   
