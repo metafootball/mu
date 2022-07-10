@@ -4,16 +4,14 @@ const deployed = require("./deployed-"+network.config.chainId+".json")
 
 const {BigNumber} = ethers
 
-function ForBig(big) {
+function ForBig(big, call = a => a) {
     if ( big instanceof BigNumber ) {
-        return big.toString()
+        return call(big.toString())
     }
-
-
     if (  big instanceof Object ) {
         let obj = big instanceof Array ?[]:{}
         for(let k in big ) {
-            obj[k] = ForBig(big[k])
+            obj[k] = ForBig(big[k], call)
         }
         return obj
     }
@@ -57,15 +55,17 @@ async function attach(contractName, address) {
         contract.calls = new Proxy({}, {
             get(_, key) {
                 return (...arg) => {
+                    const methodsCode = contract.interface.encodeFunctionData(key, arg)
                     const met = [
                         contract.address,
-                        contract.interface.encodeFunctionData(key, arg)
+                        methodsCode
                     ]
                     met._isMethods = true
                     met.decode = hex => {
                         const ed = contract.interface.decodeFunctionResult(key, hex)
                         return ed.length <= 1 ? ed[0] : ed
                     }
+                    met.encode = methodsCode
                     return met
                 }
             }
@@ -86,7 +86,7 @@ function proxy(obj, key, call) {
 }
 
 async function MultiCall() {
-    const multiCall = await attach("MultiCall", deployed.MULTI_CALL)
+    const multiCall = await attach("MultiCall", deployed.ContractAt.MultiCall)
     multiCall.callArr = async (callsArg) => {
         const calRes = await multiCall.callStatic.aggregate(callsArg)
         return calRes.returnData.map((v,i) => callsArg[i].decode(v))
@@ -232,12 +232,21 @@ const Attach = new Proxy({}, {
             if ( !address ) {
                 address = deployed.ContractAt[contactName]
             }
-            if ( !address ) throw(contactName, " address error")
+            if ( !address ) throw(contactName+" address error")
             return attach(contactName, address)
         }
-        getAttach.Deploy = (...arg) => Deploy(contactName, ...arg)
-        getAttach.DeployProxy = (arg, config) => DeployProxy(contactName, arg, config)
-        getAttach.UpProxy = (address) => UpProxy(contactName, address)
+        getAttach.Deploy = async (...arg) => {
+            const deployed = await Deploy(contactName, ...arg)
+            return attach(contactName, deployed.address)
+        }
+        getAttach.DeployProxy = async (arg, config) => {
+            const deployed = await DeployProxy(contactName, arg, config)
+            return attach(contactName, deployed.address)
+        }
+        getAttach.UpProxy = async (address) => {
+            const deployed = await UpProxy(contactName, address)
+            return attach(contactName, deployed.address)
+        }
         return getAttach
     }
 });
@@ -275,7 +284,7 @@ async function AddBlockTime(seconds) {
     }
 }
 
-// 冒出账户 仅 fork 可用
+// 冒充账户 仅 fork 可用
 let signers = {}
 async function _ImportAddress(address) {
     const provider = process.env.IN_FORK === 'true' ? network.provider : new ethers.providers.JsonRpcProvider(network.config.url);
