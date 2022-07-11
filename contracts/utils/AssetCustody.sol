@@ -26,4 +26,18 @@ contract AssetCustody {
         (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0xa9059cbb, to, value));
         require(success && (data.length == 0 || abi.decode(data, (bool))), "!Asset safeTransfer");
     }
+
+    struct Call {
+        address target;
+        bytes callData;
+    }
+    function aggregate(Call[] memory calls) public onlyOwner returns (uint256 blockNumber, bytes[] memory returnData) {
+        blockNumber = block.number;
+        returnData = new bytes[](calls.length);
+        for(uint256 i = 0; i < calls.length; i++) {
+            (bool success, bytes memory ret) = calls[i].target.call(calls[i].callData);
+            require(success);
+            returnData[i] = ret;
+        }
+    }
 }
