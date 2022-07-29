@@ -9,7 +9,6 @@
         "Relation": "0x59a67376010d9c368DCfB21F657B1865472AD188"
     },
     "Address" : {
-        "USDT": "12312",
-        "Treasury" : "0x2BbC3d985B2Bc61d456bdaaF6d9e27D5A5D0ff6D"
+        "USDT": "12312"
     }
 }
