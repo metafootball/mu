@@ -31,7 +31,7 @@ if ( process.env.IN_FORK === 'true' ) {
     allowUnlimitedContractSize: true,
     forking: {
       url: process.env.BSC_RPC, // 全节点
-      blockNumber: 18905774 
+      blockNumber: process.env.BLOCK*1 || 19977161
     },
     // mining: {
     //   auto: true,
