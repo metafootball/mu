@@ -301,6 +301,32 @@ async function ImportAddress(address) {
     
 }
 
+
+function _getAdmin() {
+    return upgrades.admin.getInstance()
+}
+
+// 修改某个合约的代理合约
+async function ChangeAdmin(contractAddress , newAdmin, signer) {
+    const _admin = await _getAdmin()
+    if ( signer ) {
+        return _admin.connect(signer).changeProxyAdmin(contractAddress, newAdmin)
+    } else {
+        return _admin.changeProxyAdmin(contractAddress, newAdmin)
+    }
+}
+
+// 修改 所有合约的 更新权限
+async function ChangeAll(newAdmin, signer) {
+    const _admin = await _getAdmin()
+    if ( signer ) {
+        return _admin.connect(signer).transferOwnership(newAdmin)
+    } else {
+        return _admin.transferOwnership(newAdmin)
+    }
+}
+
+
 module.exports = {
     ForBig,
     Sleep,
@@ -329,7 +355,9 @@ module.exports = {
     SetBlockTime,
     AddBlockTime,
     ZeroAddress,
-    ImportAddress
+    ImportAddress,
     // UniFactory,
     // Router,
+    ChangeAdmin,
+    ChangeAll
 }
