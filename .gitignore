@@ -9,7 +9,7 @@ work.sh
 #Hardhat files
 cache
 artifacts
-work
+# work
 replenish.js
 
 .openzeppelin
